@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 
 import {
 	intro,
@@ -48,7 +48,7 @@ class PackageUpdater {
 
 	async init() {
 		console.clear();
-		intro(pc.bgCyan(pc.black(' 📦 Workspace Version Aligner ')));
+		intro(pc.bgCyan(pc.black(' 📦 Package Updater ')));
 		await this.scanWorkspaces();
 	}
 
@@ -121,11 +121,14 @@ class PackageUpdater {
 	}
 
 	private displayWorkspaces() {
-		const workspacesByType = this.workspaces.reduce((acc, workspace) => {
-			if (!acc[workspace.type]) acc[workspace.type] = [];
-			acc[workspace.type].push(workspace);
-			return acc;
-		}, {} as Record<string, WorkspaceInfo[]>);
+		const workspacesByType = this.workspaces.reduce(
+			(acc, workspace) => {
+				if (!acc[workspace.type]) acc[workspace.type] = [];
+				acc[workspace.type].push(workspace);
+				return acc;
+			},
+			{} as Record<string, WorkspaceInfo[]>
+		);
 
 		let display = '\n';
 
@@ -135,9 +138,7 @@ class PackageUpdater {
 
 			workspaces.forEach((workspace) => {
 				const relativePath = relative(this.rootPath, workspace.path);
-				display += `  ${pc.gray('├─')} ${pc.white(workspace.name)} ${pc.dim(
-					`(${relativePath})\n`
-				)}`;
+				display += `  ${pc.gray('├─')} ${pc.white(workspace.name)} ${pc.dim(`(${relativePath})\n`)}`;
 			});
 			display += '\n';
 		});
@@ -230,9 +231,7 @@ class PackageUpdater {
 				message: 'Select specific workspaces:',
 				options: this.workspaces.map((w) => ({
 					value: w.path,
-					label: `${this.getTypeIcon(w.type)} ${w.name} ${pc.dim(
-						`(${relative(this.rootPath, w.path)})`
-					)}`,
+					label: `${this.getTypeIcon(w.type)} ${w.name} ${pc.dim(`(${relative(this.rootPath, w.path)})`)}`,
 				})),
 			});
 
@@ -248,16 +247,12 @@ class PackageUpdater {
 		const installCommand = this.getInstallCommand(packageManager).join(' ');
 
 		note(
-			`\n🔧 Detected package manager: ${pc.green(
-				packageManager
-			)}\n📦 Install command: ${pc.cyan(installCommand)}\n`,
+			`\n🔧 Detected package manager: ${pc.green(packageManager)}\n📦 Install command: ${pc.cyan(installCommand)}\n`,
 			'Installation Info'
 		);
 
 		const confirmInstall = await confirm({
-			message: `Install packages in ${targetWorkspaces.length} workspace${
-				targetWorkspaces.length > 1 ? 's' : ''
-			}?`,
+			message: `Install packages in ${targetWorkspaces.length} workspace${targetWorkspaces.length > 1 ? 's' : ''}?`,
 			initialValue: true,
 		});
 
@@ -286,9 +281,7 @@ class PackageUpdater {
 			packageName as string
 		);
 		if (latestVersionInfo) {
-			const latestInfo = `\n📋 Latest version on npm: ${pc.green(
-				latestVersionInfo
-			)}\n`;
+			const latestInfo = `\n📋 Latest version on npm: ${pc.green(latestVersionInfo)}\n`;
 			note(latestInfo, 'NPM Registry Info');
 		}
 
@@ -338,9 +331,7 @@ class PackageUpdater {
 				message: 'Select specific workspaces:',
 				options: this.workspaces.map((w) => ({
 					value: w.path,
-					label: `${this.getTypeIcon(w.type)} ${w.name} ${pc.dim(
-						`(${relative(this.rootPath, w.path)})`
-					)}`,
+					label: `${this.getTypeIcon(w.type)} ${w.name} ${pc.dim(`(${relative(this.rootPath, w.path)})`)}`,
 				})),
 			});
 
@@ -396,9 +387,7 @@ class PackageUpdater {
 				.filter((w) => this.hasPackage(w, packageToRemove as string))
 				.map((w) => ({
 					value: w.path,
-					label: `${this.getTypeIcon(w.type)} ${w.name} ${pc.dim(
-						`(${relative(this.rootPath, w.path)})`
-					)}`,
+					label: `${this.getTypeIcon(w.type)} ${w.name} ${pc.dim(`(${relative(this.rootPath, w.path)})`)}`,
 				})),
 		});
 
@@ -446,9 +435,7 @@ class PackageUpdater {
 
 		if (versions.size === 1) {
 			note(
-				`Package "${String(packageName)}" already has consistent version: ${
-					Array.from(versions.keys())[0]
-				}`,
+				`Package "${String(packageName)}" already has consistent version: ${Array.from(versions.keys())[0]}`,
 				'Already Synced'
 			);
 			return;
@@ -470,9 +457,7 @@ class PackageUpdater {
 			message: 'Select version to sync to:',
 			options: Array.from(versions.keys()).map((version) => ({
 				value: version,
-				label: `${version} (used in ${versions.get(version)!.length} workspace${
-					versions.get(version)!.length > 1 ? 's' : ''
-				})`,
+				label: `${version} (used in ${versions.get(version)!.length} workspace${versions.get(version)!.length > 1 ? 's' : ''})`,
 			})),
 		});
 
@@ -520,11 +505,7 @@ class PackageUpdater {
 			display += pc.bold(pc.cyan(`📦 ${packageName}\n`));
 
 			Array.from(versionMap.entries()).forEach(([version, workspaces]) => {
-				display += `  ${pc.yellow(version)} ${pc.dim(
-					`(${workspaces.length} workspace${
-						workspaces.length > 1 ? 's' : ''
-					})\n`
-				)}`;
+				display += `  ${pc.yellow(version)} ${pc.dim(`(${workspaces.length} workspace${workspaces.length > 1 ? 's' : ''})\n`)}`;
 				workspaces.forEach((workspace) => {
 					display += `    ${pc.gray('├─')} ${workspace.name}\n`;
 				});
@@ -590,9 +571,7 @@ class PackageUpdater {
 					change.action === 'add'
 						? 'Added'
 						: `Updated ${pc.dim(change.before!)} → `;
-				changesDisplay += `${icon} ${change.workspace}: ${action}${pc.green(
-					change.after
-				)}\n`;
+				changesDisplay += `${icon} ${change.workspace}: ${action}${pc.green(change.after)}\n`;
 			});
 
 			note(
@@ -678,9 +657,7 @@ class PackageUpdater {
 
 			let changesDisplay = '\n';
 			changes.forEach((change) => {
-				changesDisplay += `🗑️  ${change.workspace}: Removed from ${
-					change.type
-				} ${pc.dim(`(${change.version})`)}\n`;
+				changesDisplay += `🗑️  ${change.workspace}: Removed from ${change.type} ${pc.dim(`(${change.version})`)}\n`;
 			});
 
 			note(changesDisplay, dryRun ? 'Preview Removals' : 'Applied Removals');
@@ -719,7 +696,8 @@ class PackageUpdater {
 		packageName: string,
 		targetVersion: string,
 		versions: Map<string, WorkspaceInfo[]>,
-		dryRun: boolean
+		dryRun: boolean,
+		suppressExit?: boolean
 	) {
 		const s = spinner();
 		s.start(dryRun ? 'Previewing sync...' : 'Syncing versions...');
@@ -775,9 +753,7 @@ class PackageUpdater {
 
 			let changesDisplay = '\n';
 			changes.forEach((change) => {
-				changesDisplay += `🔄 ${change.workspace}: ${pc.dim(
-					change.before
-				)} → ${pc.green(change.after)} ${pc.gray(`(${change.type})`)}\n`;
+				changesDisplay += `🔄 ${change.workspace}: ${pc.dim(change.before)} → ${pc.green(change.after)} ${pc.gray(`(${change.type})`)}\n`;
 			});
 
 			note(changesDisplay, dryRun ? 'Preview Sync' : 'Applied Sync');
@@ -787,31 +763,32 @@ class PackageUpdater {
 					message: 'Apply these changes?',
 					initialValue: false,
 				});
-
 				if (apply) {
 					await this.executeSyncVersions(
 						packageName,
 						targetVersion,
 						versions,
-						false
+						false,
+						suppressExit
 					);
 				}
 			} else {
-				// Ask if user wants to install packages after successful sync
-				const shouldInstall = await confirm({
-					message: 'Install packages now? (Recommended after version changes)',
-					initialValue: true,
-				});
-
-				if (shouldInstall) {
-					const allWorkspaces = Array.from(versions.values())
-						.flat()
-						.map((w) => w.path);
-					await this.installPackages(allWorkspaces);
+				if (!suppressExit) {
+					// Ask if user wants to install packages after successful sync
+					const shouldInstall = await confirm({
+						message:
+							'Install packages now? (Recommended after version changes)',
+						initialValue: true,
+					});
+					if (shouldInstall) {
+						const allWorkspaces = Array.from(versions.values())
+							.flat()
+							.map((w) => w.path);
+						await this.installPackages(allWorkspaces);
+					}
+					outro(pc.green('✨ Version sync completed successfully!'));
+					process.exit(0);
 				}
-
-				outro(pc.green('✨ Version sync completed successfully!'));
-				process.exit(0);
 			}
 		} catch (error) {
 			s.stop('❌ Sync failed');
@@ -863,19 +840,13 @@ class PackageUpdater {
 		// Display conflicts summary
 		let conflictsSummary = '\n';
 		conflictsSummary += pc.red(
-			`Found ${conflicts.length} package${
-				conflicts.length > 1 ? 's' : ''
-			} with version conflicts:\n\n`
+			`Found ${conflicts.length} package${conflicts.length > 1 ? 's' : ''} with version conflicts:\n\n`
 		);
 
 		conflicts.forEach(([packageName, versionMap]) => {
 			conflictsSummary += pc.bold(pc.yellow(`📦 ${packageName}\n`));
 			Array.from(versionMap.entries()).forEach(([version, workspaces]) => {
-				conflictsSummary += `  ${pc.cyan(version)} ${pc.dim(
-					`(${workspaces.length} workspace${
-						workspaces.length > 1 ? 's' : ''
-					})\n`
-				)}`;
+				conflictsSummary += `  ${pc.cyan(version)} ${pc.dim(`(${workspaces.length} workspace${workspaces.length > 1 ? 's' : ''})\n`)}`;
 				workspaces.forEach((workspace) => {
 					conflictsSummary += `    ${pc.gray('├─')} ${workspace.name}\n`;
 				});
@@ -909,10 +880,179 @@ class PackageUpdater {
 	private async resolveAllConflicts(
 		conflicts: Array<[string, Map<string, WorkspaceInfo[]>]>
 	) {
-		for (const [packageName, versionMap] of conflicts) {
-			await this.resolvePackageConflict(packageName, versionMap);
+		// Prompt for bulk resolution strategy
+		const bulkStrategy = await select({
+			message: 'How would you like to resolve all conflicts?',
+			options: [
+				{
+					value: 'inuse',
+					label: '🎯 Choose a version in use for each package (bulk)',
+				},
+				{ value: 'latest', label: '🚀 Use latest version from npm for all' },
+				{
+					value: 'interactive',
+					label: '🛠️ Resolve each conflict interactively (default)',
+				},
+			],
+		});
+
+		let affectedWorkspaces: string[] = [];
+		if (bulkStrategy === 'inuse') {
+			for (const [packageName, versionMap] of conflicts) {
+				// Build options: all in-use versions, plus latest and skip
+				let versionOptions = Array.from(versionMap.keys()).map((version) => ({
+					value: version,
+					label: `${version} ${pc.dim(`(used in ${versionMap.get(version)!.length} workspace${versionMap.get(version)!.length > 1 ? 's' : ''})`)}`,
+				}));
+				versionOptions.push({
+					value: 'latest',
+					label: `${pc.green('Use latest from npm')}`,
+				});
+				versionOptions.push({
+					value: 'skip',
+					label: `${pc.gray('Skip (do nothing)')}`,
+				});
+
+				const chosenVersion = await select({
+					message: `Select version to use for ${packageName}:`,
+					options: versionOptions,
+				});
+
+				if (chosenVersion === 'skip') {
+					note(`Skipped resolution for ${packageName}`, 'Skipped');
+					continue;
+				}
+
+				let finalVersion = chosenVersion as string;
+				if (chosenVersion === 'latest') {
+					const latestInfo = await this.fetchLatestVersion(
+						packageName,
+						versionMap
+					);
+					finalVersion = latestInfo?.version || 'latest';
+				}
+
+				await this.executeSyncVersions(
+					packageName,
+					finalVersion,
+					versionMap,
+					false,
+					true
+				);
+				affectedWorkspaces.push(
+					...Array.from(versionMap.values())
+						.flat()
+						.map((w) => w.path)
+				);
+			}
+			// Remove duplicates
+			affectedWorkspaces = [...new Set(affectedWorkspaces)];
+			outro(pc.green('✨ All conflicts resolved to chosen in-use versions!'));
+		} else if (bulkStrategy === 'latest') {
+			for (const [packageName, versionMap] of conflicts) {
+				const latestInfo = await this.fetchLatestVersion(
+					packageName,
+					versionMap
+				);
+				const latestVersion = latestInfo?.version || 'latest';
+				await this.executeSyncVersions(
+					packageName,
+					latestVersion,
+					versionMap,
+					false,
+					true
+				);
+				affectedWorkspaces.push(
+					...Array.from(versionMap.values())
+						.flat()
+						.map((w) => w.path)
+				);
+			}
+			affectedWorkspaces = [...new Set(affectedWorkspaces)];
+			outro(pc.green('✨ All conflicts resolved to latest versions!'));
+		} else {
+			for (const [packageName, versionMap] of conflicts) {
+				// Custom interactive resolution, but batch install
+				let versionDisplay = '\n';
+				versionDisplay += pc.bold(pc.cyan(`📦 Resolving: ${packageName}\n\n`));
+				Array.from(versionMap.entries()).forEach(([version, workspaces]) => {
+					versionDisplay += pc.yellow(`Version ${version}:\n`);
+					workspaces.forEach((workspace) => {
+						versionDisplay += `  ${pc.gray('├─')} ${workspace.name}\n`;
+					});
+					versionDisplay += '\n';
+				});
+				note(versionDisplay, `Conflict Resolution for ${packageName}`);
+				const latestVersionInfo = await this.fetchLatestVersion(
+					packageName,
+					versionMap
+				);
+				if (latestVersionInfo) {
+					const latestInfo = `\n📋 Latest version on npm: ${pc.green(latestVersionInfo.version)}${latestVersionInfo.isNewer ? pc.yellow(' 🆕 (newer than current versions)') : pc.gray(' (already in use)')}\n`;
+					note(latestInfo, 'NPM Registry Info');
+				}
+				const resolutionOptions = [
+					...Array.from(versionMap.keys()).map((version) => ({
+						value: version,
+						label: `${version} ${pc.dim(`(used in ${versionMap.get(version)!.length} workspace${versionMap.get(version)!.length > 1 ? 's' : ''})`)}`,
+					})),
+					...(latestVersionInfo
+						? [
+								{
+									value: latestVersionInfo.version,
+									label: `${latestVersionInfo.version} ${pc.green('(latest from npm)')} ${latestVersionInfo.isNewer ? pc.yellow('🆕') : ''}`,
+								},
+							]
+						: []),
+					{ value: 'custom', label: '✨ Enter custom version' },
+					{ value: 'skip', label: '⏭️  Skip this package' },
+				];
+				const targetVersion = await select({
+					message: `Select target version for ${packageName}:`,
+					options: resolutionOptions,
+				});
+				if (targetVersion === 'skip') {
+					note(`Skipped resolution for ${packageName}`, 'Skipped');
+					continue;
+				}
+				let finalVersion = targetVersion as string;
+				if (targetVersion === 'custom') {
+					const customVersion = await text({
+						message: `Enter custom version for ${packageName}:`,
+						placeholder: 'e.g., ^5.6.0, latest, ~4.0.0',
+						validate: (value) =>
+							value.length === 0 ? 'Version is required' : undefined,
+					});
+					finalVersion = customVersion as string;
+				}
+				await this.executeSyncVersions(
+					packageName,
+					finalVersion,
+					versionMap,
+					false,
+					true
+				);
+				affectedWorkspaces.push(
+					...Array.from(versionMap.values())
+						.flat()
+						.map((w) => w.path)
+				);
+			}
+			affectedWorkspaces = [...new Set(affectedWorkspaces)];
+			outro(pc.green('✨ All conflicts resolved successfully!'));
 		}
-		outro(pc.green('✨ All conflicts resolved successfully!'));
+
+		// Prompt for install ONCE for all affected workspaces
+		if (affectedWorkspaces.length > 0) {
+			const shouldInstall = await confirm({
+				message:
+					'Install packages now? (Recommended after resolving conflicts)',
+				initialValue: true,
+			});
+			if (shouldInstall) {
+				await this.installPackages(affectedWorkspaces);
+			}
+		}
 		process.exit(0);
 	}
 
@@ -965,34 +1105,22 @@ class PackageUpdater {
 
 		// Display npm latest version info if available
 		if (latestVersionInfo) {
-			const latestInfo = `\n📋 Latest version on npm: ${pc.green(
-				latestVersionInfo.version
-			)}${
-				latestVersionInfo.isNewer
-					? pc.yellow(' 🆕 (newer than current versions)')
-					: pc.gray(' (already in use)')
-			}\n`;
+			const latestInfo = `\n📋 Latest version on npm: ${pc.green(latestVersionInfo.version)}${latestVersionInfo.isNewer ? pc.yellow(' 🆕 (newer than current versions)') : pc.gray(' (already in use)')}\n`;
 			note(latestInfo, 'NPM Registry Info');
 		}
 
 		const resolutionOptions = [
 			...Array.from(versionMap.keys()).map((version) => ({
 				value: version,
-				label: `${version} ${pc.dim(
-					`(used in ${versionMap.get(version)!.length} workspace${
-						versionMap.get(version)!.length > 1 ? 's' : ''
-					})`
-				)}`,
+				label: `${version} ${pc.dim(`(used in ${versionMap.get(version)!.length} workspace${versionMap.get(version)!.length > 1 ? 's' : ''})`)}`,
 			})),
 			...(latestVersionInfo
 				? [
 						{
 							value: latestVersionInfo.version,
-							label: `${latestVersionInfo.version} ${pc.green(
-								'(latest from npm)'
-							)} ${latestVersionInfo.isNewer ? pc.yellow('🆕') : ''}`,
+							label: `${latestVersionInfo.version} ${pc.green('(latest from npm)')} ${latestVersionInfo.isNewer ? pc.yellow('🆕') : ''}`,
 						},
-				  ]
+					]
 				: []),
 			{ value: 'custom', label: '✨ Enter custom version' },
 			{ value: 'skip', label: '⏭️  Skip this package' },
@@ -1100,9 +1228,7 @@ class PackageUpdater {
 			// Display summary
 			let summary = '\n';
 			resolutions.forEach(({ packageName, targetVersion, changes }) => {
-				summary += `📦 ${packageName}: ${pc.green(targetVersion)} ${pc.dim(
-					`(${changes} changes)`
-				)}\n`;
+				summary += `📦 ${packageName}: ${pc.green(targetVersion)} ${pc.dim(`(${changes} changes)`)}\n`;
 			});
 
 			note(summary, 'Auto-Resolution Summary');
@@ -1138,9 +1264,7 @@ class PackageUpdater {
 		conflicts: Array<[string, Map<string, WorkspaceInfo[]>]>
 	) {
 		const confirmLatest = await confirm({
-			message: `This will update ${conflicts.length} package${
-				conflicts.length > 1 ? 's' : ''
-			} to "latest" version. Continue?`,
+			message: `This will update ${conflicts.length} package${conflicts.length > 1 ? 's' : ''} to "latest" version. Continue?`,
 			initialValue: false,
 		});
 
@@ -1344,9 +1468,8 @@ class PackageUpdater {
 			const packageManager = await this.detectPackageManager();
 
 			// Group workspaces by their location for more efficient installation
-			const workspaceGroups = await this.groupWorkspacesByLocation(
-				targetWorkspaces
-			);
+			const workspaceGroups =
+				await this.groupWorkspacesByLocation(targetWorkspaces);
 
 			for (const { path, workspaces } of workspaceGroups) {
 				const { spawn } = await import('child_process');
@@ -1397,9 +1520,7 @@ class PackageUpdater {
 		} catch (error) {
 			s.stop('❌ Package installation failed');
 			note(
-				`Installation error: ${
-					error instanceof Error ? error.message : 'Unknown error'
-				}`,
+				`Installation error: ${error instanceof Error ? error.message : 'Unknown error'}`,
 				'Installation Failed'
 			);
 
