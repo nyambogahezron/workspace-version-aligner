@@ -1,6 +1,6 @@
 {
 	"name": "workspace-version-aligner",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "CLI tool to detect and fix mismatched dependency versions in monorepos",
 	"main": "dist/index.js",
 	"bin": {
@@ -8,7 +8,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/nyamboga/workspace-version-aligner.git"
+		"url": "git+https://github.com/nyambogahezron/workspace-version-aligner.git"
 	},
 	"keywords": [
 		"monorepo",
@@ -18,9 +18,9 @@
 		"cli"
 	],
 	"bugs": {
-		"url": "https://github.com/nyamboga/workspace-version-aligner/issues"
+		"url": "https://github.com/nyambogahezron/workspace-version-aligner/issues"
 	},
-	"homepage": "https://github.com/nyamboga/workspace-version-aligner#readme",
+	"homepage": "https://github.com/nyambogahezron/workspace-version-aligner#readme",
 	"author": "Nyamboga Hezron",
 	"license": "MIT",
 	"dependencies": {

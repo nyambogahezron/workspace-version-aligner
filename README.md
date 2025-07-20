@@ -281,11 +281,6 @@ Feel free to enhance the package updater:
 3. **Performance**: Optimization for large monorepos
 4. **Platform Support**: Windows batch script version
 
-## 📝 License
-
-This tool is part of your task-flow project and follows the same license terms.
-
----
 
 **Happy Package Managing! 📦✨**
 
