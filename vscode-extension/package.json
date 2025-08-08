@@ -4,6 +4,10 @@
 	"description": "Manage package versions across monorepo workspaces with a visual interface",
 	"version": "1.0.0",
 	"publisher": "nyambogahezron",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nyambogahezron/workspace-version-aligner.git"
+	},
 	"engines": {
 		"vscode": "^1.74.0"
 	},
@@ -111,11 +115,14 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./"
+		"watch": "tsc -watch -p ./",
+		"package": "vsce package",
+		"test": "node verify.js"
 	},
 	"devDependencies": {
-		"@types/vscode": "^1.74.0",
 		"@types/node": "16.x",
+		"@types/vscode": "^1.74.0",
+		"@vscode/vsce": "^3.6.0",
 		"typescript": "^4.9.4"
 	},
 	"dependencies": {

@@ -7,8 +7,9 @@ export class WorkspaceScanner {
 	private workspaces: WorkspaceInfo[] = [];
 	private _onWorkspacesChanged = new vscode.EventEmitter<WorkspaceInfo[]>();
 	public readonly onWorkspacesChanged = this._onWorkspacesChanged.event;
+	private rootPath: string;
 
-	constructor(private rootPath?: string) {
+	constructor(rootPath?: string) {
 		this.rootPath =
 			rootPath ||
 			vscode.workspace.workspaceFolders?.[0]?.uri.fsPath ||

@@ -77,14 +77,14 @@ export function activate(context: vscode.ExtensionContext) {
 			try {
 				const packageName = await vscode.window.showInputBox({
 					prompt: 'Enter package name',
-					placeholder: 'e.g., typescript, react, lodash',
+					placeHolder: 'e.g., typescript, react, lodash',
 				});
 
 				if (!packageName) return;
 
 				const version = await vscode.window.showInputBox({
 					prompt: 'Enter package version',
-					placeholder: 'e.g., ^5.6.0, latest, ~4.0.0',
+					placeHolder: 'e.g., ^5.6.0, latest, ~4.0.0',
 					value: 'latest',
 				});
 
@@ -166,7 +166,7 @@ export function activate(context: vscode.ExtensionContext) {
 		async () => {
 			const packageName = await vscode.window.showInputBox({
 				prompt: 'Enter package name to sync',
-				placeholder: 'e.g., typescript, react',
+				placeHolder: 'e.g., typescript, react',
 			});
 
 			if (!packageName) return;
